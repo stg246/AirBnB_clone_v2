@@ -114,6 +114,16 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
+        """create <Class name> <param 1> <param 2> <param 3>...
+        Class name = ARG
+        PARAM = <key name>=<value>
+                 value syntax: "<value>"
+        SYNOPSIS: Create a new instance from input ARG and PARAMS.
+        EXAMPLE: create State name="California"
+                 State.create(name="California")
+                 name="My_little_house"
+                 name=My little house
+             
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
