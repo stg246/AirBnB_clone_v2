@@ -7,9 +7,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
 from os import getenv
 
+
 class State(BaseModel, Base):
     """ State class """
-     __tablename__ = "states"
+    __tablename__ = "states"
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade="delete", backref="state")
 
@@ -19,8 +20,9 @@ class State(BaseModel, Base):
             """ cities getter attribute """
             cities_list = []
             all_cities = models.storage.all(City)
-            for city in all_cities.values():  # change .items() to values() as it
-                # returns an obj that contains values of a dictionary as a list
+            for city in all_cities.values():  # change .items()
+                # to values() as it returns an obj that
+                # contains values of a dictionary as a list
                 if city.state_id == self.id:
                     cities_list.append(city)
             return cities_list

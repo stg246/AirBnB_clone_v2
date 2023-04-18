@@ -5,7 +5,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
     state_id = Column(String(60), Foreignkey('states.id'), nullable=False)
