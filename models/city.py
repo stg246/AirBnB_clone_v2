@@ -15,7 +15,7 @@ class City(BaseModel, Base):
         name (sqlalchemy String): The name of the City.
         state_id (sqlalchemy String): The state id of the City.
     """
-    state_id = Column(String(60), Foreignkey('states.id'), nullable=False)
+     __tablename__ = "cities"
     name = Column(String(128), nullable=False)
-    __tablename__ = 'cities'
-    places = relationship('Place', backref='cities', cascade='delete')
+    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    places = relationship("Place", backref="cities", cascade="delete")
