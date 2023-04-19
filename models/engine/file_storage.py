@@ -9,11 +9,19 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
-        if cls is None:
-            return FileStorage.__objects
-        return {k: v for k, v in FileStorage.__objects.items()
-                if type(val) == cls}
+        """Return a dictionary of instantiated objects in __objects.
+        If a cls is specified, returns a dictionary of objects of that type.
+        Otherwise, returns the __objects dictionary.
+        """
+        if cls is not None:
+            if type(cls) == str:
+                cls = eval(cls)
+            cls_dict = {}
+            for k, v in self.__objects.items():
+                if type(v) == cls:
+                    cls_dict[k] = v
+            return cls_dict
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -29,11 +37,11 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
-        """delete obj from __objects"""
-        if not obj:
-            return
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        del FileStorage.__objects[key]
+        """Delete a given object from __objects, if it exists."""
+        try:
+            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
+        except (AttributeError, KeyError):
+            pass
 
     def reload(self):
         """Loads storage dictionary from file"""
