@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """This class defines a user by various attributes"""
+    """This class defines a user by various attributes
     
     Inherits from SQLAlchemy Base and links to the MySQL table users.
     
