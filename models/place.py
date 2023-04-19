@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from models.amenity import Amenity
 import models
+import os
 from models.review import Review
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table
@@ -52,7 +53,7 @@ class Place(BaseModel, Base):
                              viewonly=False)
     amenity_ids = []
 
-    if getenv("HBNB_TYPE_STORAGE", None) != "db":
+    if os.getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
         def reviews(self):
             """Get a list of all linked Reviews."""
