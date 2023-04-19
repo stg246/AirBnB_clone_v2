@@ -32,14 +32,18 @@ if os.getenv('HBNB_ENV') == 'test':
 
 def all(self, cls=None):
     """ all method """
-    dict_objs = {}
-    for clss in classes:
-        if cls is None or cls is classes[clss] or cls is clss:
-            objs = self.__session.query(classes[clss]).all()
-    for obj in objs:
-        key = obj.__class__.__name__ + '.' + obj.id
-        dict_objs[key] = obj
-        return (dict_objs)
+    if cls is None:
+            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(City).all())
+            objs.extend(self.__session.query(User).all())
+            objs.extend(self.__session.query(Place).all())
+            objs.extend(self.__session.query(Review).all())
+            objs.extend(self.__session.query(Amenity).all())
+        else:
+            if type(cls) == str:
+                cls = eval(cls)
+            objs = self.__session.query(cls)
+        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
 
 
 def new(self, obj):
