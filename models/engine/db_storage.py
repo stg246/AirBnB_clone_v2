@@ -33,7 +33,7 @@ if os.getenv('HBNB_ENV') == 'test':
 def all(self, cls=None):
     """ all method """
     dict_objs = {}
-    for cls in classes:
+    for clss in classes:
         if cls is None or cls is classes[clss] or cls is clss:
             objs = self.__session.query(classes[clss]).all()
     for obj in objs:
