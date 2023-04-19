@@ -115,26 +115,37 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """create <Class name> <param 1> <param 2> <param 3>...
-        Class name = ARG
-        PARAM = <key name>=<value>
-                 value syntax: "<value>"
-        SYNOPSIS: Create a new instance from input ARG and PARAMS.
-        EXAMPLE: create State name="California"
-                 State.create(name="California")
-                 name="My_little_house"
-                 name=My little house
-             
-        """ Create an object of any class"""
-        if not args:
+        Create a new class instance.
+        """
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+
+            kwargs = {}
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                obj = eval(my_list[0])()
+            else:
+                obj = eval(my_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
             print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
