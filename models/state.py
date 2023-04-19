@@ -9,20 +9,23 @@ from os import getenv
 
 
 class State(BaseModel, Base):
-    """ State class """
+    """Represents a state for a MySQL database.
+    Inherits from SQLAlchemy Base and links to the MySQL table states.
+    Attributes:
+        __tablename__ (str): The name of the MySQL table to store States.
+        name (sqlalchemy String): The name of the State.
+        cities (sqlalchemy relationship): The State-City relationship.
+    """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="delete", backref="state")
+    cities = relationship("City",  backref="state", cascade="delete")
 
-    if os.getenv('HBNB_TYPE_STORAGE') != "db":
+    if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def cities(self):
-            """ cities getter attribute """
-            cities_list = []
-            all_cities = models.storage.all(City)
-            for city in all_cities.values():  # change .items()
-                # to values() as it returns an obj that
-                # contains values of a dictionary as a list
+            """Get a list of all related City objects."""
+            city_list = []
+            for city in list(models.storage.all(City).values()):
                 if city.state_id == self.id:
-                    cities_list.append(city)
-            return cities_list
+                    city_list.append(city)
+            return city_list
