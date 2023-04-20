@@ -7,12 +7,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import String
+from sqlalchemy.orm import declarative_mixin
 
 
 Base = declarative_base()
 
 
-class BaseModel:
+class BaseModel():
     """A base class for all hbnb models
     
      Attributes:
@@ -31,7 +32,7 @@ class BaseModel:
             *args (any): Unused.
             **kwargs (dict): Key/value pairs of attributes.
         """
-        self.id = str(uuid4())
+        self.id = str(uuid.uuid4())
         self.created_at = self.updated_at = datetime.utcnow()
         if kwargs:
             for key, value in kwargs.items():
