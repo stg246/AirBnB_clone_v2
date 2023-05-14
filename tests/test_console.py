@@ -83,11 +83,11 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create User email="hoal@.com" password="1234"')
+            self.consol.onecmd("create User")
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("all User")
-            # self.assertEqual(
-            #     "[[User]", f.getvalue()[:7])
+            self.assertEqual(
+                "[[User]", f.getvalue()[:7])
 
     def test_show(self):
         """Test show command inpout"""
@@ -226,12 +226,11 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("User.update(" + my_id + ")")
             self.assertEqual(
-                "** no instance found **\n", f.getvalue())
+                "** attribute name missing **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("User.update(" + my_id + ", name)")
             self.assertEqual(
-                "** no instance found **\n", f.getvalue())
-
+                "** value missing **\n", f.getvalue())
 
 if __name__ == "__main__":
     unittest.main()

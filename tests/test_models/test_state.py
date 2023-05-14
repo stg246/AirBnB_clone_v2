@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 """test for state"""
 import unittest
-import MySQLdb
-from models import storage
 import os
 from models.state import State
 from models.base_model import BaseModel
@@ -24,39 +22,11 @@ class TestState(unittest.TestCase):
         del cls.state
 
     def tearDown(self):
-        """Close the MySQL connection after testing"""
+        """teardown"""
         try:
             os.remove("file.json")
         except Exception:
             pass
-            
-     @unittest.skipIf(storage._DBStorage__engine == 'db', "Skipping MySQL test for db storage engine")
-     def test_create_state(self):
-        # Establish database connection
-        db = MySQLdb.connect(host="HBNB_MYSQL_HOST", user="HBNB_MYSQL_USER", passwd="HBNB_MYSQL_PWD", db="BNB_MYSQL_DB")
-        cursor = db.cursor()
-        
-        # Get the number of current records in the states table
-        self.cursor.execute("SELECT COUNT(*) FROM states")
-        count_before = self.cursor.fetchone()[0]
-
-        # Create a new State object
-        new_state = State(name="California")
-
-        # Add the State object to the database
-        self.storage.new(new_state)
-        self.storage.save()
-
-        # Get the number of records in the states table after adding the new State
-        self.cursor.execute("SELECT COUNT(*) FROM states")
-        count_after = self.cursor.fetchone()[0]
-
-        # Assert that the count increased by 1 after adding the new State
-        self.assertEqual(count_after, count_before + 1)
-        
-        # Close cursor and database connection
-        cursor.close()
-        db.close()
 
     def test_pep8_Review(self):
         """Tests pep8 style"""

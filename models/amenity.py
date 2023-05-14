@@ -1,21 +1,28 @@
 #!/usr/bin/python3
-"""Defines the Amenity class."""
-from models.base_model import Base
-from models.base_model import BaseModel
-from sqlalchemy import Column
-from sqlalchemy import String
+"""This is the amenity class"""
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False)
+                      )
 
 
 class Amenity(BaseModel, Base):
-    """Represents an Amenity for a MySQL database.
-    Inherits from SQLAlchemy Base and links to the MySQL table amenities.
+    """This is the class for Amenity
     Attributes:
-        __tablename__ (str): The name of the MySQL table to store Amenities.
-        name (sqlalchemy String): The amenity name.
-        place_amenities (sqlalchemy relationship): Place-Amenity relationship.
+        name: input name
     """
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary="place_amenity",
-                                   viewonly=False)
+    """ Class attribute place_amenities must represent a relationship
+    Many-To-Many between the class Place and Amenity. Please see below more
+    detail: place_amenity in the Place update """
+    place_amenities = relationship("Place", secondary='place_amenity',
+                                   back_populates="_amenities")
